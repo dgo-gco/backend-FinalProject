@@ -9,8 +9,11 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(@InjectModel('User') private userModel: Model<IUser>) {}
 
+  async getUsers() {
+    return 'hello';
+  }
+
   async findOne(username: string): Promise<IUser | undefined> {
-    console.log(username);
     const email = this.userModel.findOne({ username });
     return email;
   }
@@ -34,6 +37,12 @@ export class UsersService {
       });
       if (isUserRegistered) {
         return 'This user already exists!';
+      }
+      const usernameExists = await this.userModel.findOne({
+        username: user.username,
+      });
+      if (usernameExists) {
+        return 'This username has been taken. Choose another one.';
       }
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(user.password, salt);
