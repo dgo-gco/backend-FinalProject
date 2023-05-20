@@ -36,7 +36,7 @@ export class UsersService {
           user.password
         )
       ) {
-        return 'All fields are required';
+        return 'All fields are required XD';
       }
       const isUserRegistered = await this.userModel.findOne({
         email: user.email,
