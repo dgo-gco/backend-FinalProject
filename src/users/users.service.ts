@@ -14,8 +14,14 @@ export class UsersService {
   }
 
   async findOne(username: string): Promise<IUser | undefined> {
-    const email = this.userModel.findOne({ username });
-    return email;
+    const user = this.userModel.findOne({ username });
+    console.log('user service', user);
+    return user;
+  }
+
+  async findUserById(id: string): Promise<IUser | undefined> {
+    const user = this.userModel.findById(id);
+    return user;
   }
 
   async registerUser(user: createUserDto) {
