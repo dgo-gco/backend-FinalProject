@@ -22,6 +22,7 @@ export class AppController {
   @Post('auth/login')
   async login(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     const authToken = this.authService.login(req.user);
+    console.log(authToken);
     res.cookie('jwt-auth', (await authToken).access_token, { httpOnly: true });
     return authToken;
   }
@@ -29,7 +30,6 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Req() req: Request) {
-    // console.log('request app', req);
     return req.user;
   }
 

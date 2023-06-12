@@ -36,7 +36,7 @@ export class createPostDto {
 
   @IsString()
   @MaxLength(300)
-  likes: string[];
+  likes: object;
 
   @IsString()
   @MaxLength(300)

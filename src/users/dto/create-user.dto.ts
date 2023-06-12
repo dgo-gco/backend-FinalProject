@@ -29,4 +29,9 @@ export class createUserDto {
   @MaxLength(100)
   @IsNotEmpty()
   password: string;
+
+  @IsString()
+  @MaxLength(300)
+  @IsNotEmpty()
+  userPhoto: string;
 }

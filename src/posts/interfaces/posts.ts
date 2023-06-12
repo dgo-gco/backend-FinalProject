@@ -8,6 +8,6 @@ export interface IPost extends Document {
   description: string;
   userPhoto: string;
   postPhoto: string;
-  likes: [number];
+  likes: object;
   comments: [string];
 }

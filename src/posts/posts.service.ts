@@ -28,7 +28,7 @@ export class PostsService {
         comments: [],
       });
       return await newPost.save();
-      // We need to return all the posts so the front has an updated list of all the posts.
+      // We need to return all the posts so the front has an updated list of all the posts. WITH STATE
     } catch (error) {
       console.log(error);
     }
@@ -43,4 +43,27 @@ export class PostsService {
       console.error(error);
     }
   }
+
+  // async likePost() {
+  //   try {
+  //     const { id } = req.params;
+  //     const { userId } = req.body;
+  //     const post = await this.postModel.findById(id);
+  //     const isLiked = post.likes.get(userId);
+
+  //     if (isLiked) {
+  //       post.likes.delete(userId);
+  //     } else {
+  //       post.likes.set(userId, true);
+  //     }
+
+  //     const updatedPost = await this.postModel.findByIdAndUpdate(
+  //       id,
+  //       { likes: post.likes },
+  //       { new: true },
+  //     );
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 }

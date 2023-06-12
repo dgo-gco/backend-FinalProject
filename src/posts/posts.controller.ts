@@ -45,9 +45,7 @@ export class PostsController {
     @Body() post: createPostDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log('FILE: ', file);
     const user = await this.usersService.findUserById(post.userId);
-    console.log(user);
     return this.postsService.createPost(post, user, file);
   }
 

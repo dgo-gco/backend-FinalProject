@@ -7,4 +7,5 @@ export interface IUser extends Document {
   readonly lastName: string;
   readonly email: string;
   password: string;
+  userPhoto: string;
 }

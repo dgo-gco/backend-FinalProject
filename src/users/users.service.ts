@@ -53,9 +53,22 @@ export class UsersService {
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(user.password, salt);
       newUser.password = hashedPassword;
+      newUser.userPhoto = '';
       return await newUser.save();
     } catch (error) {
       return error;
+    }
+  }
+
+  async updateUser(user: createUserDto, userId: string) {
+    try {
+      const userToUpdate = await this.userModel.findByIdAndUpdate(userId, user);
+      if (!userToUpdate) {
+        return 'User not found.';
+      }
+      return userToUpdate;
+    } catch (error) {
+      console.error(error);
     }
   }
 }
