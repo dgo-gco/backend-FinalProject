@@ -14,8 +14,14 @@ export class UsersService {
   }
 
   async findOne(username: string): Promise<IUser | undefined> {
-    const email = this.userModel.findOne({ username });
-    return email;
+    const user = this.userModel.findOne({ username });
+    console.log('user service', user);
+    return user;
+  }
+
+  async findUserById(id: string): Promise<IUser | undefined> {
+    const user = this.userModel.findById(id);
+    return user;
   }
 
   async registerUser(user: createUserDto) {
@@ -30,7 +36,7 @@ export class UsersService {
           user.password
         )
       ) {
-        return 'All fields are required';
+        return 'All fields are required XD';
       }
       const isUserRegistered = await this.userModel.findOne({
         email: user.email,
@@ -47,9 +53,22 @@ export class UsersService {
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(user.password, salt);
       newUser.password = hashedPassword;
+      newUser.userPhoto = '';
       return await newUser.save();
     } catch (error) {
       return error;
+    }
+  }
+
+  async updateUser(user: createUserDto, userId: string) {
+    try {
+      const userToUpdate = await this.userModel.findByIdAndUpdate(userId, user);
+      if (!userToUpdate) {
+        return 'User not found.';
+      }
+      return userToUpdate;
+    } catch (error) {
+      console.error(error);
     }
   }
 }

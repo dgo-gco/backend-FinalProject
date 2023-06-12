@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { createUserDto } from './dto/create-user.dto';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -25,5 +26,19 @@ export class UsersController {
   @Post('register')
   createUsers(@Body() user: createUserDto): object {
     return this.usersService.registerUser(user);
+  }
+
+  @Put(':id/update')
+  async updateUser(@Body() user: createUserDto, @Req() req: Request) {
+    try {
+      const updateUser = await this.usersService.updateUser(
+        user,
+        req.params.id,
+      );
+      console.log(updateUser);
+      return updateUser;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
