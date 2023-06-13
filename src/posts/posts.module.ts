@@ -10,7 +10,7 @@ import { PostSchema } from './schemas/post.schema';
   imports: [
     MongooseModule.forFeature([{ name: 'Post', schema: PostSchema }]),
     MulterModule.register({
-      dest: './uploads',
+      dest: './uploads/posts',
     }),
     UsersModule,
   ],

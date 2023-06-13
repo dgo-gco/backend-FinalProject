@@ -44,6 +44,26 @@ export class PostsService {
     }
   }
 
+  async getPostById(id: string) {
+    try {
+      const post = await this.postModel.findById(id);
+      return post;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async addComment(post, user, req) {
+    try {
+      const postToComment = await this.postModel.findById(post.userId);
+      //console.log(postToComment);
+      //console.log(req);
+      return postToComment;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   // async likePost() {
   //   try {
   //     const { id } = req.params;

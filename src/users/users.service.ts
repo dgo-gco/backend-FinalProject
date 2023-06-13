@@ -60,6 +60,26 @@ export class UsersService {
     }
   }
 
+  async uploadPhoto(
+    user: createUserDto,
+    userId: string,
+    file: Express.Multer.File,
+  ) {
+    try {
+      const uploadUserPhoto = await this.userModel.findByIdAndUpdate(
+        userId,
+        user,
+      );
+      if (!uploadUserPhoto) {
+        return 'User not found.';
+      }
+      uploadUserPhoto.userPhoto = file.filename;
+      return await uploadUserPhoto.save();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async updateUser(user: createUserDto, userId: string) {
     try {
       const userToUpdate = await this.userModel.findByIdAndUpdate(userId, user);

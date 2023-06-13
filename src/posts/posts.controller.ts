@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Req,
   UploadedFile,
@@ -53,5 +54,23 @@ export class PostsController {
   @Get('all-posts')
   async getPosts() {
     return this.postsService.getPosts();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async getPostById(@Param('id') params) {
+    return this.postsService.getPostById(params);
+  }
+
+  @Post(':id/addcomment')
+  async commentPost(
+    @Body() post: createPostDto,
+    @Req() req: Request,
+    @Param('id') params,
+  ) {
+    // TODO : get only username, name, lastn, and photo.
+    const userWhoComments = await this.usersService.findUserById(post.userId);
+    console.log(req.params);
+    return this.postsService.addComment(post, userWhoComments, req);
   }
 }

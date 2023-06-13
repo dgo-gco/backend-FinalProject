@@ -1,10 +1,23 @@
-import { Body, Controller, Get, Post, Put, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Req,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { createUserDto } from './dto/create-user.dto';
 import { Request } from 'express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('users')
 export class UsersController {
+  static path = './uploads';
   constructor(private usersService: UsersService) {}
 
   @Get('getall')
@@ -26,6 +39,33 @@ export class UsersController {
   @Post('register')
   createUsers(@Body() user: createUserDto): object {
     return this.usersService.registerUser(user);
+  }
+
+  @Post(':id/upload/userphoto')
+  @UseInterceptors(
+    FileInterceptor('userPhoto', {
+      storage: diskStorage({
+        destination: UsersController.path,
+        filename: (req, file, cb) => {
+          const filename: string = Array(10)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          return cb(null, `${filename}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  async uploadPhoto(
+    @Body() user: createUserDto,
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    try {
+      return this.usersService.uploadPhoto(user, req.params.id, file);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   @Put(':id/update')
