@@ -23,7 +23,6 @@ export class PostsService {
         location: post.location,
         description: post.description,
         postPhoto: file.filename,
-        likes: {},
       });
       return await newPost.save();
       // We need to return all the posts so the front has an updated list of all the posts. WITH STATE
@@ -64,15 +63,6 @@ export class PostsService {
     }
   }
 
-  // async getPostById(id: string) {
-  //   try {
-  //     const post = await this.postModel.findById(id);
-  //     return post;
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
-
   async getPostById(id: string) {
     try {
       const post = await this.postModel
@@ -88,26 +78,26 @@ export class PostsService {
     }
   }
 
-  // async likePost() {
-  //   try {
-  //     const { id } = req.params;
-  //     const { userId } = req.body;
-  //     const post = await this.postModel.findById(id);
-  //     const isLiked = post.likes.get(userId);
+  async likePost(postAndUserIds: any) {
+    try {
+      const post = await this.postModel.findById(postAndUserIds.postId);
+      const isLiked = post.likes.includes(postAndUserIds.userId);
+      const userIdIndex = post.likes.indexOf(postAndUserIds.userId);
 
-  //     if (isLiked) {
-  //       post.likes.delete(userId);
-  //     } else {
-  //       post.likes.set(userId, true);
-  //     }
+      if (isLiked) {
+        post.likes.splice(userIdIndex, 1);
+      } else {
+        post.likes.push(postAndUserIds.userId);
+      }
 
-  //     const updatedPost = await this.postModel.findByIdAndUpdate(
-  //       id,
-  //       { likes: post.likes },
-  //       { new: true },
-  //     );
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
+      const updatedPost = await this.postModel.findByIdAndUpdate(
+        postAndUserIds.postId,
+        { likes: post.likes },
+        { new: true },
+      );
+      return updatedPost;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
