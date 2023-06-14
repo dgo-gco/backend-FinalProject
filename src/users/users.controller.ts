@@ -20,16 +20,10 @@ export class UsersController {
   static path = './uploads';
   constructor(private usersService: UsersService) {}
 
-  @Get('getall')
-  async getAll() {
-    return this.usersService.getUsers();
-  }
-
   @Get()
   async getUser(@Body() createUserDto: createUserDto) {
     try {
       const user = await this.usersService.findOne(createUserDto.email);
-      console.log('this getUser controller', user);
       return user;
     } catch (error) {
       console.log(error);
