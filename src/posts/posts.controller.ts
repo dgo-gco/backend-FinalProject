@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Req,
   UploadedFile,
   UseGuards,
@@ -15,6 +16,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { createCommentDto } from 'src/comments/dto/create-comment.dto';
 import { UsersService } from 'src/users/users.service';
 import { createPostDto } from './dto/create-post.dto';
 import { PostsService } from './posts.service';
@@ -46,8 +48,7 @@ export class PostsController {
     @Body() post: createPostDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const user = await this.usersService.findUserById(post.userId);
-    return this.postsService.createPost(post, user, file);
+    return this.postsService.createPost(post, file);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -56,21 +57,17 @@ export class PostsController {
     return this.postsService.getPosts();
   }
 
+  @Put('comment/:id')
+  async addCommentToPost(
+    @Body() comment: createCommentDto,
+    @Param('id') params,
+  ) {
+    return this.postsService.addCommentToPost(comment, params);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getPostById(@Param('id') params) {
     return this.postsService.getPostById(params);
-  }
-
-  @Post(':id/addcomment')
-  async commentPost(
-    @Body() post: createPostDto,
-    @Req() req: Request,
-    @Param('id') params,
-  ) {
-    // TODO : get only username, name, lastn, and photo.
-    const userWhoComments = await this.usersService.findUserById(post.userId);
-    console.log(req.params);
-    return this.postsService.addComment(post, userWhoComments, req);
   }
 }

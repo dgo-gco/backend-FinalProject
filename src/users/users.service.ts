@@ -9,13 +9,8 @@ import * as bcrypt from 'bcrypt';
 export class UsersService {
   constructor(@InjectModel('User') private userModel: Model<IUser>) {}
 
-  async getUsers() {
-    return 'hello';
-  }
-
   async findOne(username: string): Promise<IUser | undefined> {
     const user = this.userModel.findOne({ username });
-    console.log('user service', user);
     return user;
   }
 
@@ -91,4 +86,6 @@ export class UsersService {
       console.error(error);
     }
   }
+
+  //TODO : logOut and DeleteUser
 }

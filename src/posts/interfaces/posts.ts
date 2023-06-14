@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { Comment } from 'src/comments/schemas/comment.schema';
 
 export interface IPost extends Document {
   readonly userId: string;
@@ -9,5 +10,5 @@ export interface IPost extends Document {
   userPhoto: string;
   postPhoto: string;
   likes: object;
-  comments: [string];
+  comments: Comment[];
 }

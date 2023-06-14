@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { Comment } from 'src/comments/schemas/comment.schema';
 
 export class createPostDto {
   @IsString()
@@ -40,5 +41,5 @@ export class createPostDto {
 
   @IsString()
   @MaxLength(300)
-  comments: string[];
+  comments: Comment[];
 }
