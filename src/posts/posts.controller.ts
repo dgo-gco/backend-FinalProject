@@ -70,4 +70,9 @@ export class PostsController {
   async getPostById(@Param('id') params) {
     return this.postsService.getPostById(params);
   }
+
+  @Put('like')
+  async likePost(@Body() postAndUserIds: any) {
+    return this.postsService.likePost(postAndUserIds);
+  }
 }
