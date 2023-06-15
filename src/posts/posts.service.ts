@@ -22,7 +22,7 @@ export class PostsService {
         userId: post.userId,
         location: post.location,
         description: post.description,
-        postPhoto: file.filename,
+        postPhoto: file ? file.filename : null,
       });
       return await newPost.save();
       // We need to return all the posts so the front has an updated list of all the posts. WITH STATE
@@ -74,6 +74,10 @@ export class PostsService {
         .populate({
           path: 'comments',
           select: 'description createdAt',
+          populate: {
+            path: 'userId',
+            select: 'firstName lastName username userPhoto',
+          },
         })
         .exec();
       return post;
