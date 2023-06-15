@@ -71,6 +71,12 @@ export class PostsController {
     return this.postsService.getPostById(params);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('user/:id')
+  async getPostByUser(@Param('id') params) {
+    return this.postsService.getPostByUser(params);
+  }
+
   @Put('like')
   async likePost(@Body() postAndUserIds: any) {
     return this.postsService.likePost(postAndUserIds);
