@@ -71,7 +71,29 @@ export class PostsService {
           path: 'userId',
           select: 'firstName lastName username userPhoto',
         })
+        .populate({
+          path: 'comments',
+          select: 'description createdAt',
+        })
         .exec();
+      return post;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async getPostByUser(userId: string) {
+    try {
+      const post = await this.postModel.find({ userId: userId });
+      // .populate({
+      //   path: 'userId',
+      //   select: 'firstName lastName username userPhoto',
+      // })
+      // .populate({
+      //   path: 'comments',
+      //   select: 'description createdAt',
+      // })
+      // .exec();
       return post;
     } catch (error) {
       console.error(error);

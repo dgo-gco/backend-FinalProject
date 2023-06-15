@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Put,
   Req,
@@ -28,6 +30,11 @@ export class UsersController {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  @Get(':id')
+  async getUserById(@Param() params: any) {
+    return this.usersService.findUserById(params.id);
   }
 
   @Post('register')
@@ -74,5 +81,10 @@ export class UsersController {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param() params) {
+    return this.usersService.deleteUser(params);
   }
 }

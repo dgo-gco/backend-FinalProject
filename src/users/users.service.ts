@@ -15,8 +15,12 @@ export class UsersService {
   }
 
   async findUserById(id: string): Promise<IUser | undefined> {
-    const user = this.userModel.findById(id);
-    return user;
+    try {
+      const user = await this.userModel.findById(id);
+      return user;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async registerUser(user: createUserDto) {
@@ -76,6 +80,9 @@ export class UsersService {
   }
 
   async updateUser(user: createUserDto, userId: string) {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    user.password = hashedPassword;
     try {
       const userToUpdate = await this.userModel.findByIdAndUpdate(userId, user);
       if (!userToUpdate) {
@@ -87,5 +94,14 @@ export class UsersService {
     }
   }
 
-  //TODO : logOut and DeleteUser
+  async deleteUser(userId: any) {
+    try {
+      const deletedUser = await this.userModel.findByIdAndDelete(userId.id);
+      return deletedUser;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  //TODO : logOut
 }
