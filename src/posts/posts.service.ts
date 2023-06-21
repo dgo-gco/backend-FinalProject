@@ -20,7 +20,8 @@ export class PostsService {
     try {
       const newPost = new this.postModel({
         userId: post.userId,
-        location: post.location,
+        actualLocation: post.actualLocation,
+        originCountry: post.originCountry,
         description: post.description,
         postPhoto: file ? file.filename : null,
       });

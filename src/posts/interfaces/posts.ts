@@ -5,7 +5,8 @@ export interface IPost extends Document {
   readonly userId: string;
   readonly firstName: string;
   readonly lastName: string;
-  readonly location: string;
+  actualLocation: string;
+  originCountry: string;
   description: string;
   userPhoto: string;
   postPhoto: string;
