@@ -14,7 +14,10 @@ export class Post extends Document {
   lastName: string;
 
   @Prop()
-  location: string;
+  originCountry: string;
+
+  @Prop()
+  actualLocation: string;
 
   @Prop()
   description: string;
