@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -79,5 +80,10 @@ export class PostsController {
   @Put('like')
   async likePost(@Body() postAndUserIds: any) {
     return this.postsService.likePost(postAndUserIds);
+  }
+
+  @Delete(':id')
+  async deletePost(@Param() params) {
+    return this.postsService.deletePost(params);
   }
 }
