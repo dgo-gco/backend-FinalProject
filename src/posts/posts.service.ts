@@ -88,17 +88,23 @@ export class PostsService {
 
   async getPostByUser(userId: string) {
     try {
-      const post = await this.postModel.find({ userId: userId });
-      // .populate({
-      //   path: 'userId',
-      //   select: 'firstName lastName username userPhoto',
-      // })
-      // .populate({
-      //   path: 'comments',
-      //   select: 'description createdAt',
-      // })
-      // .exec();
+      const post = await this.postModel
+        .find({ userId: userId })
+        .populate({
+          path: 'userId',
+          select: 'firstName lastName username userPhoto',
+        })
+        .exec();
       return post;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async deletePost(postId: any) {
+    try {
+      const deletedPost = await this.postModel.findByIdAndDelete(postId.id);
+      return deletedPost;
     } catch (error) {
       console.error(error);
     }
