@@ -26,7 +26,6 @@ export class PostsService {
         postPhoto: file ? file.filename : null,
       });
       return await newPost.save();
-      // We need to return all the posts so the front has an updated list of all the posts. WITH STATE
     } catch (error) {
       console.log(error);
     }

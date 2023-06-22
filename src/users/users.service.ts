@@ -23,6 +23,15 @@ export class UsersService {
     }
   }
 
+  async findUserByUsername(username: string): Promise<IUser | undefined> {
+    try {
+      const user = await this.userModel.findOne({ username: username });
+      return user;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async registerUser(user: createUserDto) {
     try {
       const newUser = new this.userModel(user);
@@ -35,27 +44,31 @@ export class UsersService {
           user.password
         )
       ) {
-        return 'All fields are required XD';
+        return { status: 400, message: 'All fields are required' };
       }
       const isUserRegistered = await this.userModel.findOne({
         email: user.email,
       });
       if (isUserRegistered) {
-        return 'This user already exists!';
+        return { status: 409, message: 'This user already exists!' };
       }
       const usernameExists = await this.userModel.findOne({
         username: user.username,
       });
       if (usernameExists) {
-        return 'This username has been taken. Choose another one.';
+        return {
+          status: 409,
+          message: 'This username has been taken. Choose another one.',
+        };
       }
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(user.password, salt);
       newUser.password = hashedPassword;
       newUser.userPhoto = '';
-      return await newUser.save();
+      const savedUser = await newUser.save();
+      return { status: 200, data: savedUser };
     } catch (error) {
-      return error;
+      return { status: 500, error: error.message };
     }
   }
 
@@ -102,6 +115,4 @@ export class UsersService {
       console.error(error);
     }
   }
-
-  //TODO : logOut
 }
