@@ -37,6 +37,11 @@ export class UsersController {
     return this.usersService.findUserById(params.id);
   }
 
+  @Get(':username/user')
+  async getUserByUsername(@Param() params: any) {
+    return this.usersService.findUserByUsername(params.username);
+  }
+
   @Post('register')
   createUsers(@Body() user: createUserDto): object {
     return this.usersService.registerUser(user);
