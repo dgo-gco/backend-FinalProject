@@ -11,7 +11,7 @@ export class Comment extends Document {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
   postId: Post;
 
-  @Prop()
+  @Prop({ required: true })
   description: string;
 }
 

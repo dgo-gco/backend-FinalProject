@@ -19,7 +19,7 @@ export class Post extends Document {
   @Prop()
   actualLocation: string;
 
-  @Prop()
+  @Prop({ required: true })
   description: string;
 
   @Prop()

@@ -19,10 +19,12 @@ export class createPostDto {
 
   @IsString()
   @MaxLength(100)
+  @IsNotEmpty()
   actualLocation: string;
 
   @IsString()
   @MaxLength(100)
+  @IsNotEmpty()
   originCountry: string;
 
   @IsString()

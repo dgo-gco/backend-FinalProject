@@ -2,11 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop()
-  //Add constraintst
+  @Prop({ required: true })
   userId: string;
 
-  @Prop()
+  @Prop({ required: true, unique: true })
   username: string;
 
   @Prop()
@@ -15,10 +14,10 @@ export class User {
   @Prop()
   lastName: string;
 
-  @Prop()
+  @Prop({ required: true, unique: true, minLength: 6, maxLength: 100 })
   email: string;
 
-  @Prop()
+  @Prop({ required: true })
   password: string;
 
   @Prop()
