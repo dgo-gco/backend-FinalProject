@@ -50,7 +50,11 @@ export class UsersService {
         email: user.email,
       });
       if (isUserRegistered) {
-        return { status: 409, message: 'This user already exists!' };
+        return {
+          status: 409,
+          message:
+            'The email address is already in use. Please use a different email address.',
+        };
       }
       const usernameExists = await this.userModel.findOne({
         username: user.username,
@@ -85,7 +89,7 @@ export class UsersService {
       if (!uploadUserPhoto) {
         return 'User not found.';
       }
-      uploadUserPhoto.userPhoto = file.filename;
+      uploadUserPhoto.userPhoto = file.path;
       return await uploadUserPhoto.save();
     } catch (error) {
       console.error(error);
@@ -93,11 +97,13 @@ export class UsersService {
   }
 
   async updateUser(user: createUserDto, userId: string) {
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(user.password, salt);
-    user.password = hashedPassword;
     try {
-      const userToUpdate = await this.userModel.findByIdAndUpdate(userId, user);
+      const userToUpdate = await this.userModel.findByIdAndUpdate(userId, {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        email: user.email,
+      });
       if (!userToUpdate) {
         return 'User not found.';
       }
