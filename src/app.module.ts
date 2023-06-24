@@ -17,6 +17,7 @@ import { CommentsModule } from './comments/comments.module';
     MongooseModule.forRoot(process.env.MONGODB_URL),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
     }),
     AuthModule,
     PostsModule,

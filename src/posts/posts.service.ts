@@ -23,7 +23,7 @@ export class PostsService {
         actualLocation: post.actualLocation,
         originCountry: post.originCountry,
         description: post.description,
-        postPhoto: file ? file.filename : null,
+        postPhoto: file ? file.path : null,
       });
       return await newPost.save();
     } catch (error) {
