@@ -15,7 +15,7 @@ import { AuthController } from './auth.controller';
     ConfigModule.forRoot({ envFilePath: `local.env` }),
     JwtModule.register({
       secret: process.env.SECRET_KEY,
-      signOptions: { expiresIn: '7h' },
+      signOptions: { expiresIn: '1h' },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],

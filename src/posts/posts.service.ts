@@ -3,8 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CommentsService } from 'src/comments/comments.service';
 import { createCommentDto } from 'src/comments/dto/create-comment.dto';
-import { IComment } from 'src/comments/interfaces/comments';
-import { createUserDto, userBasicInfoDto } from 'src/users/dto/create-user.dto';
 import { createPostDto } from './dto/create-post.dto';
 import { IPost } from './interfaces/posts';
 
@@ -12,7 +10,7 @@ import { IPost } from './interfaces/posts';
 export class PostsService {
   constructor(
     @InjectModel('Post') private postModel: Model<IPost>,
-    @InjectModel('Comment') private commentsModel: Model<IComment>,
+    @InjectModel('Comment')
     private commentsService: CommentsService,
   ) {}
 
@@ -55,6 +53,21 @@ export class PostsService {
       const updatedPost = await this.postModel.findByIdAndUpdate(
         postId,
         { $push: { comments: commentToAdd._id } },
+        { new: true },
+      );
+      return updatedPost;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async removeCommentFromPost(postId: string, commentId: string) {
+    const commentToRemove = await this.commentsService.deleteUser(commentId);
+
+    try {
+      const updatedPost = await this.postModel.findByIdAndUpdate(
+        postId,
+        { $pull: { comments: commentToRemove._id } },
         { new: true },
       );
       return updatedPost;

@@ -8,12 +8,6 @@ export class Post extends Document {
   userId: User;
 
   @Prop()
-  firstName: string;
-
-  @Prop()
-  lastName: string;
-
-  @Prop()
   originCountry: string;
 
   @Prop()
@@ -21,9 +15,6 @@ export class Post extends Document {
 
   @Prop({ required: true })
   description: string;
-
-  @Prop()
-  userPhoto: string;
 
   @Prop()
   postPhoto: string;

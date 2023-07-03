@@ -29,4 +29,29 @@ export class CommentsService {
       console.error(error);
     }
   }
+
+  async updateComment(comment: createCommentDto, commentId: string) {
+    try {
+      const commentToUpdate = await this.commentsModel.findByIdAndUpdate(
+        commentId,
+        {
+          description: comment.description,
+        },
+      );
+      return commentToUpdate;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async deleteUser(commentId: any) {
+    try {
+      const deletedComment = await this.commentsModel.findByIdAndDelete(
+        commentId,
+      );
+      return deletedComment;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
