@@ -1,16 +1,18 @@
-import { Body, Controller, Param, Post, Get } from '@nestjs/common';
-import { PostsService } from 'src/posts/posts.service';
-import { UsersService } from 'src/users/users.service';
+import {
+  Body,
+  Controller,
+  Param,
+  Post,
+  Get,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { createCommentDto } from './dto/create-comment.dto';
 
 @Controller('comments')
 export class CommentsController {
-  constructor(
-    private commentsService: CommentsService,
-    private postsService: PostsService,
-    private usersService: UsersService,
-  ) {}
+  constructor(private commentsService: CommentsService) {}
 
   @Post('add/:id')
   async commentPost(@Body() comment: createCommentDto, @Param('id') params) {
