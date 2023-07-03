@@ -65,6 +65,11 @@ export class PostsController {
     return this.postsService.addCommentToPost(comment, params);
   }
 
+  @Delete('comment/:id')
+  async removeCommentFromPost(@Body() comment: any, @Param('id') params) {
+    return this.postsService.removeCommentFromPost(params, comment.commentId);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async getPostById(@Param('id') params) {

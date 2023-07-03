@@ -23,4 +23,17 @@ export class CommentsController {
   async commentsByPost(@Param('id') params: string) {
     return this.commentsService.getCommentsByPost(params);
   }
+
+  @Put(':id')
+  async updateComment(
+    @Body() comment: createCommentDto,
+    @Param('id') params: string,
+  ) {
+    return this.commentsService.updateComment(comment, params);
+  }
+
+  @Delete(':id')
+  async deleteComment(@Param('id') params: string) {
+    return this.commentsService.deleteUser(params);
+  }
 }
