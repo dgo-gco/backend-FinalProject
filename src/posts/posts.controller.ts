@@ -88,6 +88,29 @@ export class PostsController {
     return this.postsService.likePost(postAndUserIds);
   }
 
+  @Put(':id')
+  @UseInterceptors(
+    FileInterceptor('postPhoto', {
+      storage: diskStorage({
+        destination: PostsController.path,
+        filename: (req, file, cb) => {
+          const filename: string = Array(10)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          return cb(null, `${filename}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  async updateComment(
+    @Body() post: createPostDto,
+    @Param('id') params: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.postsService.updatePost(post, file, params);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async deletePost(@Param() params) {
