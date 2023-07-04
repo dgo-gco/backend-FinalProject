@@ -16,7 +16,6 @@ export class PostsService {
   ) {}
 
   async createPost(post: createPostDto, file: Express.Multer.File) {
-    console.log(file);
     try {
       const newPost = new this.postModel({
         userId: post.userId,
