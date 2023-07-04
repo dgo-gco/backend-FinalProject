@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CommentsService } from 'src/comments/comments.service';
 import { createCommentDto } from 'src/comments/dto/create-comment.dto';
+import { IComment } from 'src/comments/interfaces/comments';
 import { createPostDto } from './dto/create-post.dto';
 import { IPost } from './interfaces/posts';
 
@@ -10,11 +11,12 @@ import { IPost } from './interfaces/posts';
 export class PostsService {
   constructor(
     @InjectModel('Post') private postModel: Model<IPost>,
-    @InjectModel('Comment')
+    @InjectModel('Comment') private commentsModel: Model<IComment>,
     private commentsService: CommentsService,
   ) {}
 
   async createPost(post: createPostDto, file: Express.Multer.File) {
+    console.log(file);
     try {
       const newPost = new this.postModel({
         userId: post.userId,
@@ -109,6 +111,25 @@ export class PostsService {
         })
         .exec();
       return post;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async updatePost(
+    post: createPostDto,
+    file: Express.Multer.File,
+    postId: string,
+  ) {
+    try {
+      const postInfo = await this.postModel.findById(postId);
+      const postToUpdate = await this.postModel.findByIdAndUpdate(postId, {
+        actualLocation: post.actualLocation,
+        originCountry: post.originCountry,
+        description: post.description,
+        postPhoto: file ? file.path : postInfo.postPhoto,
+      });
+      return postToUpdate;
     } catch (error) {
       console.error(error);
     }
