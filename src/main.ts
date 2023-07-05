@@ -6,7 +6,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const corsOptions = {
-    origin: 'https://reach-ticv.onrender.com',
+    origin: 'https://fantastic-trifle-538811.netlify.app/',
     credentials: true,
     methods: ['POST', 'PUT', 'DELETE', 'GET'],
   };

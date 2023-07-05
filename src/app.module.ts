@@ -13,7 +13,7 @@ import { CommentsModule } from './comments/comments.module';
 @Module({
   imports: [
     UsersModule,
-    ConfigModule.forRoot({ envFilePath: `.env` }),
+    ConfigModule.forRoot({ envFilePath: `local.env` }),
     MongooseModule.forRoot(process.env.MONGODB_URL),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
