@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+//import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -14,7 +14,7 @@ import { CommentsModule } from './comments/comments.module';
   imports: [
     UsersModule,
     ConfigModule.forRoot({ envFilePath: `local.env` }),
-    MongooseModule.forRoot(process.env.MONGODB_URL),
+    //MongooseModule.forRoot(process.env.MONGODB_URL),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),
       serveRoot: '/uploads',

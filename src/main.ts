@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { Mongoose } from 'mongoose';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -13,6 +14,13 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableCors(corsOptions);
   app.use(cookieParser());
-  await app.listen(process.env.PORT);
+
+  const mongooseInstance = app.get<Mongoose>(Mongoose);
+  const mongooseConnection = mongooseInstance.connection;
+  mongooseConnection.once('connected', () => {
+    app.listen(process.env.PORT, () => {
+      console.log('Application is listening on port', process.env.PORT);
+    });
+  });
 }
 bootstrap();
