@@ -92,4 +92,16 @@ export class UsersController {
   async deleteUser(@Param() params) {
     return this.usersService.deleteUser(params);
   }
+
+  @Post('follow/:id')
+  async follow(@Param('id') params, @Body() userToFollowId: string) {
+    console.log(userToFollowId);
+    return this.usersService.handleFollow(params, userToFollowId);
+  }
+
+  @Delete('unfollow/:id')
+  async unfollow(@Param() params) {
+    console.log(params);
+    return this.usersService.unfollowUser(params.id);
+  }
 }

@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsArray,
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class createUserDto {
   @IsString()
@@ -35,6 +41,12 @@ export class createUserDto {
   @MaxLength(300)
   @IsNotEmpty()
   userPhoto: string;
+
+  @IsArray()
+  followers: string[];
+
+  @IsArray()
+  following: string[];
 }
 
 export class userBasicInfoDto {
