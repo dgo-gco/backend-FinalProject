@@ -4,10 +4,16 @@ import { Model } from 'mongoose';
 import { IUser } from './interfaces/users';
 import { createUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { FollowersService } from 'src/followers/followers.service';
+import { IFollower } from 'src/followers/interfaces/followers';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('User') private userModel: Model<IUser>) {}
+  constructor(
+    @InjectModel('User') private userModel: Model<IUser>,
+    @InjectModel('Follower') private followerModel: Model<IFollower>,
+    private followersService: FollowersService,
+  ) {}
 
   async findOne(username: string): Promise<IUser | undefined> {
     const user = this.userModel.findOne({ username });
@@ -117,6 +123,62 @@ export class UsersService {
     try {
       const deletedUser = await this.userModel.findByIdAndDelete(userId.id);
       return deletedUser;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async handleFollow(newFollowingId: string, userToFollowId: any) {
+    const followInfo = {
+      follower: newFollowingId,
+      following: userToFollowId.userId,
+    };
+    const followToAdd = await this.followersService.addFollower(followInfo);
+    try {
+      const userWhoFollows = await this.userModel.findById(newFollowingId);
+      console.log('result from usermd', userWhoFollows);
+      const isFollowing = userWhoFollows.following.includes(
+        userToFollowId.userId,
+      );
+
+      if (isFollowing) {
+        await this.userModel.findByIdAndUpdate(
+          newFollowingId,
+          { $pull: { following: followToAdd.following } },
+          { new: true },
+        );
+        await this.userModel.findByIdAndUpdate(
+          userToFollowId.userId,
+          { $pull: { followers: followToAdd.follower } },
+          { new: true },
+        );
+      } else {
+        await this.userModel.findByIdAndUpdate(
+          newFollowingId,
+          { $push: { following: followToAdd.following } },
+          { new: true },
+        );
+        await this.userModel.findByIdAndUpdate(
+          userToFollowId.userId,
+          { $push: { followers: followToAdd.follower } },
+          { new: true },
+        );
+      }
+      return userWhoFollows;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async unfollowUser(userId: string) {
+    const followRelationToDelete =
+      await this.followersService.getFollowRelation(userId);
+    console.log('Who r we gonna unfollow', followRelationToDelete);
+    try {
+      const unfollow = await this.followerModel.findByIdAndDelete(
+        followRelationToDelete._id,
+      );
+      return unfollow;
     } catch (error) {
       console.error(error);
     }

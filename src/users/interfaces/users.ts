@@ -8,4 +8,6 @@ export interface IUser extends Document {
   readonly email: string;
   password: string;
   userPhoto: string;
+  followers: string[];
+  following: string[];
 }

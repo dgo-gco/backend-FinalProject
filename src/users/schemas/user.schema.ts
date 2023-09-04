@@ -1,4 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
+import { Follower } from 'src/followers/schemas/follower.schema';
 
 @Schema({ timestamps: true })
 export class User {
@@ -19,6 +21,12 @@ export class User {
 
   @Prop()
   userPhoto: string;
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Follower' }] })
+  followers: Follower[];
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Follower' }] })
+  following: Follower[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
