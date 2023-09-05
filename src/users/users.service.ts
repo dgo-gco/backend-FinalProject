@@ -136,49 +136,41 @@ export class UsersService {
     const followToAdd = await this.followersService.addFollower(followInfo);
     try {
       const userWhoFollows = await this.userModel.findById(newFollowingId);
-      console.log('result from usermd', userWhoFollows);
-      const isFollowing = userWhoFollows.following.includes(
-        userToFollowId.userId,
-      );
 
-      if (isFollowing) {
-        await this.userModel.findByIdAndUpdate(
-          newFollowingId,
-          { $pull: { following: followToAdd.following } },
-          { new: true },
-        );
-        await this.userModel.findByIdAndUpdate(
-          userToFollowId.userId,
-          { $pull: { followers: followToAdd.follower } },
-          { new: true },
-        );
-      } else {
-        await this.userModel.findByIdAndUpdate(
-          newFollowingId,
-          { $push: { following: followToAdd.following } },
-          { new: true },
-        );
-        await this.userModel.findByIdAndUpdate(
-          userToFollowId.userId,
-          { $push: { followers: followToAdd.follower } },
-          { new: true },
-        );
-      }
+      await this.userModel.findByIdAndUpdate(
+        newFollowingId,
+        { $push: { following: followToAdd.following } },
+        { new: true },
+      );
+      await this.userModel.findByIdAndUpdate(
+        userToFollowId.userId,
+        { $push: { followers: followToAdd.follower } },
+        { new: true },
+      );
       return userWhoFollows;
     } catch (error) {
       console.error(error);
     }
   }
 
-  async unfollowUser(userId: string) {
-    const followRelationToDelete =
-      await this.followersService.getFollowRelation(userId);
-    console.log('Who r we gonna unfollow', followRelationToDelete);
+  async unfollowUser(followerId: any, followingId: any) {
+    const userToDelete = await this.followersService.getFollowRelation(
+      followerId.id,
+      followingId.id,
+    );
+    await this.userModel.findByIdAndUpdate(
+      followerId.id,
+      { $pull: { following: userToDelete.following } },
+      { new: true },
+    );
+    await this.userModel.findByIdAndUpdate(
+      followingId.id,
+      { $pull: { followers: userToDelete.follower } },
+      { new: true },
+    );
     try {
-      const unfollow = await this.followerModel.findByIdAndDelete(
-        followRelationToDelete._id,
-      );
-      return unfollow;
+      const followRelationToDelete =
+        await this.followersService.deleteFollowRelation(followerId.id);
     } catch (error) {
       console.error(error);
     }

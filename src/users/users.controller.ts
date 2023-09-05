@@ -28,7 +28,7 @@ export class UsersController {
       const user = await this.usersService.findOne(createUserDto.email);
       return user;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -70,7 +70,7 @@ export class UsersController {
     try {
       return this.usersService.uploadPhoto(user, req.params.id, file);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -81,10 +81,9 @@ export class UsersController {
         user,
         req.params.id,
       );
-      console.log(updateUser);
       return updateUser;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }
 
@@ -95,13 +94,11 @@ export class UsersController {
 
   @Post('follow/:id')
   async follow(@Param('id') params, @Body() userToFollowId: string) {
-    console.log(userToFollowId);
     return this.usersService.handleFollow(params, userToFollowId);
   }
 
   @Delete('unfollow/:id')
-  async unfollow(@Param() params) {
-    console.log(params);
-    return this.usersService.unfollowUser(params.id);
+  async unfollow(@Param() params, @Body() id) {
+    return this.usersService.unfollowUser(params, id);
   }
 }
