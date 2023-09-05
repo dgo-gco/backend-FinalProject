@@ -7,9 +7,8 @@ import { FollowersService } from './followers.service';
 export class FollowersController {
   constructor(private followersService: FollowersService) {}
 
-  @Delete('unfollow')
-  async unfollow(@Body() userId: string) {
-    console.log('paraams', userId);
-    return this.followersService.getFollowRelation(userId);
+  @Delete('unfollow/:id')
+  async unfollow(@Param() params: string) {
+    return this.followersService.deleteFollowRelation(params);
   }
 }

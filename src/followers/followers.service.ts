@@ -24,10 +24,22 @@ export class FollowersService {
     }
   }
 
-  async getFollowRelation(userId: string) {
+  async getFollowRelation(followerId: any, followingId: string) {
+    try {
+      const followRelation = await this.followerModel.findOne({
+        follower: followerId,
+        following: followingId,
+      });
+      return followRelation;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async deleteFollowRelation(userId: any) {
     try {
       const followRelation = await this.followerModel.findOneAndDelete({
-        following: userId,
+        follower: userId,
       });
       return followRelation;
     } catch (error) {
